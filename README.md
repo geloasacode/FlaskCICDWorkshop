@@ -32,10 +32,10 @@ To run this Flask application, follow these steps:
 
 ## Routes
 
-/: Main route displaying the colored background and version.
-/color: Returns the currently displayed color.
-/version: Returns the application version.
-/info: Returns the combination of version and color information.
+- `/`: Main route displaying the colored background and version.
+- `/color`: Returns the currently displayed color.
+- `/version`: Returns the application version.
+- `/info`: Returns the combination of version and color information.
 
 ## Notes
 
