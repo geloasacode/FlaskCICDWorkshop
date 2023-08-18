@@ -19,9 +19,13 @@ To run this Flask application, follow these steps:
    cd your-repo
 
 2. Assuming that you have docker installed in your local machine, you may run the command below:
+   
+   ```bash
    docker build -t <your-desired-web-name> .
 
 3. Run a container using the created docker image by typing the command below:
+   
+   ```bash
    docker run -d -p 8080:8080 <your-desired-web-name>
 
 4. To run, open a web browser and navigate to http://localhost:8080 to see the application in action.
