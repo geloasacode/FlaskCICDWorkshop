@@ -34,7 +34,7 @@ jobs:
       run: |
         # Use AWS CLI or SDK to query ECR and get the latest image tag
         latest_tag=$(aws ecr list-images --repository-name $ECR_REPO --query 'imageIds[].imageTag' --output text | sort -V | tail -n 1)
-        echo "::set-output name=latest_tag::$latest_tag"
+     #echo "::set-output name=latest_tag::$latest_tag"
 
     - name: Increment Tag
       id: increment-tag
