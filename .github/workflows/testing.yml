@@ -1,4 +1,5 @@
 name: Python testing application
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 on:
   pull_request:
@@ -15,16 +16,16 @@ jobs:
       matrix:
         python-version: ["3.10", "3.11"]
 
-    steps:
-    - uses: actions/checkout@v3
+    steps: 
+    - uses: actions/checkout@v3 # "- uses" > denotes from which predefined scripts you will get actions.
     
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }} # "- name" > Just the name of the action.
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: ${{ matrix.python-version }} # "We use moustache notation here which python version we will use"
     
     - name: Install dependencies
-      run: |
+      run: | # "run" > Use for running commands to the shell
         python -m pip install --upgrade pip
         pip install flake8 pytest flask
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
