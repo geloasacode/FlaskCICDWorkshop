@@ -44,9 +44,9 @@ jobs:
         major=${version_parts[0]}
         minor=${version_parts[1]}
         ((minor++))
-        incremented_tag="$major.$minor"
+        incremented_tag=$major.$minor
 
-        echo "::set-output name=incremented_tag::$incremented_tag"
+      #echo "::set-output name=incremented_tag::$incremented_tag"
 
     - name: Build, tag, and Push Docker image to ECR
       env:
