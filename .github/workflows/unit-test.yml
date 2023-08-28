@@ -1,11 +1,11 @@
 name: ci-test
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
-  deploy:
+  Build and Deploy Image:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
