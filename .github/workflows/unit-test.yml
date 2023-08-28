@@ -1,12 +1,21 @@
-name: ci-test
-#
-on:
-  push:
-    branches:
-      - main
+name: Build Docker Image
 
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_run:
+    workflows: [ "Python testing application" ]
+    types: [completed]
+    
 jobs:
-  Build:
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure'}}
+    steps:
+      - name: Print Failure Message
+        run: echo 'The Initial test failed'
+
+  on-success:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
