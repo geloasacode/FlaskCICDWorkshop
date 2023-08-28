@@ -27,31 +27,65 @@ jobs:
       with:
         mask-password: 'true'
 
-    - name: Query ECR for Latest Image Tag
-      id: get-latest-tag
-      env:
-        ECR_REPO: simple-flask
-      run: |
-        # Use AWS CLI or SDK to query ECR and get the latest image tag
-        latest_tag=$(aws ecr list-images --repository-name $ECR_REPO --query 'imageIds[].imageTag' --output text | sort -V | tail -n 1)
-     #echo "::set-output name=latest_tag::$latest_tag"
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: 608569176201.dkr.ecr.us-east-1.amazonaws.com/simple-flask:1.0
+        flavor: latest=true
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      env: 
+        ECR_REGISTRY: ${{ steps.meta.outputs.registry}}
+        ECR_REPOSITORY: simple-flask
+      with:
+        context: .
+          push: true
+          tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-    - name: Increment Tag
-      id: increment-tag
-      run: |
-        latest_tag=${{ steps.get-latest-tag.outputs.latest_tag }}
-        IFS='.' read -ra version_parts <<< "$latest_tag"
-        major=${version_parts[0]}
-        minor=${version_parts[1]}
-        ((minor++))
-        incremented_tag=$major.$minor
+    #------------------------------------------------------------------
+    # - name: Query ECR for Latest Image Tag
+    #   id: get-latest-tag
+    #   env:
+    #     ECR_REPO: simple-flask
+    #   run: |
+    #     # Use AWS CLI or SDK to query ECR and get the latest image tag
+    #     latest_tag=$(aws ecr list-images --repository-name $ECR_REPO --query 'imageIds[].imageTag' --output text | sort -V | tail -n 1)
+    # #echo "::set-output name=latest_tag::$latest_tag"
 
-      #echo "::set-output name=incremented_tag::$incremented_tag"
+    # - name: Increment Tag
+    #   id: increment-tag
+    #   run: |
+    #     latest_tag=${{ steps.get-latest-tag.outputs.latest_tag }}
+    #     IFS='.' read -ra version_parts <<< "$latest_tag"
+    #     major=${version_parts[0]}
+    #     minor=${version_parts[1]}
+    #     ((minor++))
+    #     incremented_tag=$major.$minor
 
-    - name: Build, tag, and Push Docker image to ECR
-      env:
-        IMAGE_TAG: ${{ steps.increment-tag.outputs.incremented_tag }}
-      run: |
-        docker build -t $ECR_REPO:$IMAGE_TAG .
-        docker tag $ECR_REPO:$IMAGE_TAG
-        docker push $ECR_REPO:$IMAGE_TAG
+    #   #echo "::set-output name=incremented_tag::$incremented_tag"
+
+    # - name: Build, tag, and Push Docker image to ECR
+    #   env:
+    #     IMAGE_TAG: ${{ steps.increment-tag.outputs.incremented_tag }}
+    #   run: |
+    #     docker build -t $ECR_REPO:$IMAGE_TAG .
+    #     docker tag $ECR_REPO:$IMAGE_TAG
+    #     docker push $ECR_REPO:$IMAGE_TAG
+    #-------------------------------------------------------------------
+    
+    #-------------------------------------------------------------------
+      # - name: Build, tag, and Push Docker image to ECR
+      #  env:
+      #    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      #    ECR_REPOSITORY: simple-flask
+      #    IMAGE_TAG: $ {{ github.sha }}
+      #   run: |
+      #    docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+      #    docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    #-------------------------------------------------------------------
