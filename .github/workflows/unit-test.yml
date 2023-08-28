@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  Build and Deploy Image:
+  Build:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -35,7 +35,7 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        
+
     # ------------------------------------------------------------------
     # - name: Docker meta
     #   id: meta
