@@ -28,28 +28,28 @@ jobs:
         mask-password: 'true'
 
 
-    #------------------------------------------------------------------
-    # - name: Docker meta
-    #   id: meta
-    #   uses: docker/metadata-action@v4
-    #   with:
-    #     images: 608569176201.dkr.ecr.us-east-1.amazonaws.com/simple-flask:1.0
-    #     flavor: latest=true
-    #     tags: |
-    #       type=ref,event=branch
-    #       type=ref,event=pr
-    #       type=semver,pattern={{version}}
+    ------------------------------------------------------------------
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: 608569176201.dkr.ecr.us-east-1.amazonaws.com/simple-flask:1.0
+        flavor: latest=true
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
           
-    # - name: Build and push
-    #   uses: docker/build-push-action@v4
-    #   env: 
-    #     ECR_REGISTRY: ${{ steps.meta.outputs.registry }}
-    #     ECR_REPOSITORY: simple-flask
-    #   with:
-    #     context: .
-    #       push: true
-    #       tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
-    #------------------------------------------------------------------
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      env: 
+        ECR_REGISTRY: ${{ steps.meta.outputs.registry }}
+        ECR_REPOSITORY: simple-flask
+      with:
+        context: .
+          push: true
+          tags: $ECR_REGISTRY/$ECR_REPOSITORY:latest
+    ------------------------------------------------------------------
 
     #------------------------------------------------------------------
     # - name: Query ECR for Latest Image Tag
@@ -83,12 +83,12 @@ jobs:
     #-------------------------------------------------------------------
     
     #-------------------------------------------------------------------
-    - name: Build, tag, and Push Docker image to ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: simple-flask
-        IMAGE_TAG: ${{ github.sha }}
-      run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    # - name: Build, tag, and Push Docker image to ECR
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     ECR_REPOSITORY: simple-flask
+    #     IMAGE_TAG: ${{ github.sha }}
+    #   run: |
+    #     docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+    #     docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
     #-------------------------------------------------------------------
