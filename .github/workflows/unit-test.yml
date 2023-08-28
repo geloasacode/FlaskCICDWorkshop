@@ -1,8 +1,9 @@
 name: ci-test
 #
 on:
-  pull_request:
-    branches: [ "main" ]
+  push:
+    branches:
+      - main
 
 jobs:
   Build:
