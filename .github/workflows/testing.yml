@@ -25,7 +25,7 @@ jobs:
         python-version: ${{ matrix.python-version }} # "We use moustache notation here which python version we will use"
     
     - name: Install dependencies
-      run: | # "run" > Use for running commands to the shell
+      run: | # "run" > Use for running commands to the shell.
         python -m pip install --upgrade pip
         pip install flake8 pytest flask
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
