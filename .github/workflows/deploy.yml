@@ -18,6 +18,10 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    
+    defaults:
+      run: 
+        working-directory: terraform
 
     steps:
       - name: Checkout to main branch
