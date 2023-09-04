@@ -78,10 +78,9 @@ resource "aws_instance" "sample-web-app" {
       # Query image tags and store them in a variable     
       "image_tags=$(aws ecr describe-images --repository-name gero --output json --query 'imageDetails[].imageTags[]' | jq -r 'join(" ,")')",  
       # Get the latest image tag       
-      "latest_tag=$(echo $image_tags | tr ' ' '\n' | sort -V | tail -n 1)",
-      "echo 'Using the latest Docker image with tag: ${latest_tag}'",     
-      "docker pull 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:${latest_tag}",
-      "docker run -d -p 8080:8080 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:${latest_tag}"
+      "latest_tag=$(echo $image_tags | tr ' ' '\n' | sort -V | tail -n 1)",     
+      "docker pull 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:latest_tag=$(echo $image_tags | tr ' ' '\n' | sort -V | tail -n 1)",
+      "docker run -d -p 8080:8080 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:latest_tag=$(echo $image_tags | tr ' ' '\n' | sort -V | tail -n 1)"
     ]
   }
 }
