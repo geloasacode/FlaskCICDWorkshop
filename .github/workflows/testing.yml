@@ -19,6 +19,11 @@ jobs:
     steps: 
     - uses: actions/checkout@v3 # "- uses" > denotes from which predefined scripts you will get actions.
     
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
     - name: Set up Python ${{ matrix.python-version }} # "- name" > Just the name of the action.
       uses: actions/setup-python@v4
       with:
