@@ -55,9 +55,9 @@ resource "aws_instance" "sample-web-app" {
   }
 
   connection {
-    type        = "ssh"
-    user        = "ec2-user"
-    private_key = file("./terraform.pem")
+    type = "ssh"
+    user = "ec2-user"
+    private_key = ${{ secrets.PRIVATE_KEY }}
     host        = self.public_ip
   }
 
