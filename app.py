@@ -6,6 +6,7 @@ import random
 import os
 import argparse
 
+
 app = Flask(__name__)
 
 color_codes = {

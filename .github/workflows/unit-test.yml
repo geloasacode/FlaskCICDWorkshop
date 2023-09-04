@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Build Docker Image And Upload TO ECR
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
   workflow_run:
     workflows: [ "Python testing application" ]
     types: [completed]
+  workflow_dispatch: 
     
 jobs:
   on-failure:
