@@ -43,13 +43,11 @@ jobs:
       with:
         mask-password: 'true'
      
-    # - name: Empty Image Repository
-    #   uses: aws-actions/aws-ecr@v1
-    #   with:
-    #     repository: simple-flask
-    #     region: us-east-1
-    #     image-tag: latest
-    #     force: true
+    - name: Empty Image Repository
+      uses: LeiaInc/devops-delete-old-aws-ecr-images@v1
+      with:
+        repo-name: gero
+        qtd-images: 0
 
     - name: Build, tag, and Push Docker image to ECR
       env:
