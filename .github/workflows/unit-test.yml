@@ -43,11 +43,29 @@ jobs:
       with:
         mask-password: 'true'
      
-    - name: Empty Image Repository
-      uses: LeiaInc/devops-delete-old-aws-ecr-images@v1
-      with:
-        repo-name: gero
-        qtd-images: 0
+    # - name: Empty Image Repository
+    #   uses: LeiaInc/devops-delete-old-aws-ecr-images@v1
+    #   with:
+    #     repo-name: gero
+    #     qtd-images: 0
+
+    - name: Delete All Images from ECR Repository
+      run: |
+
+        ECR_REPO_NAME="gero"
+
+        # List all image IDs in the ECR repository
+        image_ids=$(aws ecr list-images --repository-name $ECR_REPO_NAME --query 'imageIds[*]' --output json)
+
+        # Iterate over the image IDs and delete each image
+        for id in $(echo "$image_ids" | jq -r '.[] | @base64'); do
+          id=$(echo "$id" | base64 --decode)
+          image_digest=$(echo "$id" | jq -r '.imageDigest')
+          aws ecr batch-delete-image --repository-name $ECR_REPO_NAME --image-ids imageDigest=$image_digest
+        done
+      env:
+        AWS_DEFAULT_REGION: us-east-1  # Replace with your AWS region
+
 
     - name: Build, tag, and Push Docker image to ECR
       env:
