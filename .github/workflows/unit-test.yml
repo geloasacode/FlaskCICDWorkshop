@@ -52,7 +52,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    # ------------------------------------------------------------------
+    # -----------------------------------------------------------------
     # - name: Docker meta
     #   id: meta
     #   uses: docker/metadata-action@v4
