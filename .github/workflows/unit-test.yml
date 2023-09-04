@@ -42,16 +42,9 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
       with:
         mask-password: 'true'
-     
-    # - name: Empty Image Repository
-    #   uses: LeiaInc/devops-delete-old-aws-ecr-images@v1
-    #   with:
-    #     repo-name: gero
-    #     qtd-images: 0
 
     - name: Delete All Images from ECR Repository
       run: |
-
         ECR_REPO_NAME="gero"
 
         # List all image IDs in the ECR repository

@@ -57,13 +57,14 @@ resource "aws_instance" "sample-web-app" {
   connection {
     type = "ssh"
     user = "ec2-user"
-    private_key = ${{ secrets.PRIVATE_KEY }}
+    private_key = file("./terraform.pem")
     host        = self.public_ip
   }
 
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
+      "sudo yum install jq",
       "sudo yum install docker -y",
       "sudo service docker start",
       "sudo usermod -aG docker ec2-user",
@@ -74,8 +75,12 @@ resource "aws_instance" "sample-web-app" {
   provisioner "remote-exec" {
     inline = [
       "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 608569176201.dkr.ecr.us-east-1.amazonaws.com",
-      "docker pull 608569176201.dkr.ecr.us-east-1.amazonaws.com/simple-flask:1.0",
-      "docker run -d -p 8080:8080 608569176201.dkr.ecr.us-east-1.amazonaws.com/simple-flask:1.0",
+      # Query image tags and store them in a variable     
+      "image_tags=$(aws ecr describe-images --repository-name gero --output json --query 'imageDetails[].imageTags[]' | jq -r 'join(" ")')",  
+      # Get the latest image tag       
+      "latest_tag=$(echo $image_tags | tr ' ' '\n' | sort -V | tail -n 1)",     
+      "docker pull 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:${latest_tag}",
+      "docker run -d -p 8080:8080 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:${latest_tag}"
     ]
   }
 }
