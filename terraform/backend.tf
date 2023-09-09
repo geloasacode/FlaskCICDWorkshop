@@ -1,9 +1,9 @@
 terraform {
   backend "s3" {
-    bucket = "simple-flask-bucket"
-    key    = "./terraform.tfstate"
+    bucket         = "simple-flask-bucket"
+    key            = "./terraform.tfstate"
     dynamodb_table = "simple-flask-dynamodb-table"
-    region = "us-east-1"
+    region         = "us-east-1"
   }
   required_providers {
     aws = {
