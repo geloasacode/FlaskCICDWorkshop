@@ -26,3 +26,4 @@ runcmd:
   - sudo chmod u+x /home/ec2-user/my-script.sh
   - sudo /home/ec2-user/my-script.sh
   - sudo usermod -aG docker ec2-user
+  - exit

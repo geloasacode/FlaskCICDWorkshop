@@ -1,5 +1,5 @@
 variable "aws-key-pair" {
-  description = "key pair to be used"
+  description = "key pair to be use"
   type        = string
   default     = "terraform"
 }
