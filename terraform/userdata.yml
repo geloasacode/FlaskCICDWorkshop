@@ -1,0 +1,28 @@
+#cloud-config
+
+# Update the system and install necessary packages
+package_upgrade: true
+packages:
+  - jq
+
+# Bash script
+write_files:
+  - path: /home/ec2-user/my-script.sh
+    content: |
+      #!/bin/bash -e
+      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 608569176201.dkr.ecr.us-east-1.amazonaws.com
+      image_tags=$(aws ecr describe-images --repository-name simple-flask --output json --query 'imageDetails[].imageTags[]' | jq -r 'join(", ")')
+      docker pull 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:$image_tags
+      docker run -d -p 8080:8080 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:$image_tags
+
+# Install Docker and start the Docker service
+runcmd:
+  - sudo yum update -y
+  - sudo yum install jq -y
+  - sudo yum install docker -y
+  - sudo service docker start
+
+# Add the ec2-user to the docker group
+  - sudo chmod u+x /home/ec2-user/my-script.sh
+  - sudo /home/ec2-user/my-script.sh
+  - sudo usermod -aG docker ec2-user
