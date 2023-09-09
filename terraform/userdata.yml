@@ -11,7 +11,7 @@ write_files:
     content: |
       #!/bin/bash -e
       aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 608569176201.dkr.ecr.us-east-1.amazonaws.com
-      image_tags=$(aws ecr describe-images --repository-name simple-flask --output json --query 'imageDetails[].imageTags[]' | jq -r 'join(", ")')
+      image_tags=$(aws ecr describe-images --repository-name gero --output json --query 'imageDetails[].imageTags[]' | jq -r 'join(", ")')
       docker pull 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:$image_tags
       docker run -d -p 8080:8080 608569176201.dkr.ecr.us-east-1.amazonaws.com/gero:$image_tags
 
