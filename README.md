@@ -1,57 +1,73 @@
-# Dockerized Simple Flask Application Deployed in Amazon ECR
+![Overview](simple-flask.png)
 
-This repository contains a Python web application that has been dockerized and uploaded to Amazon Elastic Container Registry (ECR). The application can be pulled from ECR and run on any compatible machine, such as an Amazon EC2 instance.
+# CI/CD for Python Web Application
 
-## Application Overview
+This repository contains the configuration files and scripts for implementing Continuous Integration (CI) and Continuous Deployment (CD) for the Python Web Application using GitHub Actions.
 
-The Python web application is built using Flask and displays a colored background. The color can be specified using command-line arguments or environment variables. The application provides several routes to retrieve color, version information, and more.
+## CI/CD Workflows
 
-## Steps Taken
+### Python Testing Application Workflow
 
-1. **Creating the Python App:**
-   The Python web application was created using Flask and includes logic to display a colored background and handle different color options.
+- **File**: [`.github/workflows/test-and-lint.yaml`](.github/workflows/test-and-lint.yaml)
+- **Trigger**: This workflow is triggered whenever a pull request is created or updated on the `main` branch.
 
-2. **Dockerization:**
-   The application was dockerized by creating a Dockerfile. The Dockerfile specifies the base image, copies the application code into the container, and configures the application's dependencies and settings.
+#### Workflow Description
 
-3. **Uploading to Amazon ECR:**
-   The dockerized image was uploaded to Amazon ECR, a fully managed Docker container registry. This step involved creating an ECR repository, authenticating Docker with the ECR registry, and pushing the image to the repository.
+This workflow is responsible for testing the Python-based Python Web Application. It performs the following steps:
+- Sets up the Python environment based on the specified Python versions.
+- Installs project dependencies, including Flask, pytest, and flake8.
+- Lints the codebase using flake8 to check for syntax errors and coding standards.
+- Executes unit tests using pytest.
 
-4. **Running on EC2 or Any Compatible Machine:**
-   Once the image is in the ECR repository, it can be pulled and run on any compatible machine. For example, you can run the application on an Amazon EC2 instance by pulling the image from the ECR repository and starting a Docker container.
+### Build Docker Image and Upload to ECR Workflow
 
-## Prerequisites
+- **File**: [`.github/workflows/docker-ecr-ci.yaml`](.github/workflows/docker-ecr-ci.yaml)
+- **Trigger**: This workflow is triggered in the following scenarios:
+  - When a pull request is created or updated on the `main` branch.
+  - After the "Python Testing Application" workflow completes successfully.
+  - Manually triggered using the GitHub Actions workflow dispatch.
 
-- [Docker](https://www.docker.com/get-started) installed on your local machine or target machine.
-- [AWS CLI](https://aws.amazon.com/cli/) configured with appropriate AWS credentials and region.
+#### Workflow Description
 
-## Steps to Run the Application
+This workflow automates the containerization and ECR (Amazon Elastic Container Registry) image management for the Python Web Application. It consists of the following steps:
+- Checks for the result of the "Python Testing Application" workflow. If it fails, it provides a failure message.
+- Configures AWS credentials for ECR access.
+- Logs in to Amazon ECR.
+- Deletes existing images from the ECR repository.
+- Builds a Docker image and pushes it to the ECR repository.
 
-1. **Pull the Image from ECR:**
-   Run the following command to authenticate Docker with your ECR registry and pull the docker image:
+### Deploy to EC2 Workflow
 
-   ```bash
-   aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 608569176201.dkr.ecr.us-east-1.amazonaws.com
-   docker pull 608569176201.dkr.ecr.us-east-1.amazonaws.com/simple-flask:1.0
-   ```
+- **File**: [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml)
+- **Trigger**: This workflow is triggered in the following scenarios:
+  - When a pull request is created or updated on the `main` branch.
+  - After the "Build Docker Image and Upload to ECR" workflow completes successfully.
+  - Manually triggered using the GitHub Actions workflow dispatch.
 
-2. **Run the Docker Container:**
-   Run the pulled image in a Docker container. Make sure to map the container port to a host port if necessary. Replace `<your-ec2-public-ip>` with the actual public IP or DNS of your EC2 instance.
+#### Workflow Description
 
-   ```bash
-   docker run -d -p 8080:8080 608569176201.dkr.ecr.us-east-1.amazonaws.com/simple-flask:1.0
-   ```
+This workflow automates the deployment of the Python Web Application to an EC2 instance using Terraform. It includes the following steps:
+- Checks for the result of the "Build Docker Image and Upload to ECR" workflow. If it fails, it provides a failure message.
+- Sets up Terraform for infrastructure management.
+- Initializes Terraform and performs a plan to review changes.
+- Applies Terraform changes to deploy the application to EC2.
 
-3. **Access the Application:**
-   You may now access it by opening a web browser and navigating to:
+## Usage
 
-   ```
-   http://<your-ec2-public-ip>:8080
-   ```
+To use these CI/CD workflows for your Python Web Application, follow these steps:
+
+1. Fork this repository to your own GitHub account.
+
+2. Configure the necessary secrets and environment variables in your repository settings, including AWS credentials for ECR and EC2 deployment.
+
+3. Create and manage pull requests on the `main` branch to trigger the workflows automatically.
+
+4. Monitor the workflow runs and review their logs for any issues.
+
+For more details on each workflow's functionality and configuration, refer to the respective workflow files.
 
 ## Notes
 
 - This is a simplified example for educational purposes.
 - Ensure proper security group settings to allow traffic on the required ports.
-- AWS credentials and permissions must be configured correctly for ECR access.
 - Remember to clean up resources when they are no longer needed.
