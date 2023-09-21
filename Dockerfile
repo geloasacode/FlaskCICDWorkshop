@@ -1,14 +1,16 @@
-FROM python:3.6-alpine
+FROM python:3.11-alpine
+
+RUN apk update
+
+COPY ./app_folder /home/app-folder
 
 RUN pip install flask
 
-COPY . /opt/
-
-EXPOSE 8080
-
-WORKDIR /opt
+WORKDIR /home/app-folder
 
 ENV APP_COLOR=red
 ENV VERSION=v3
+
+EXPOSE 8080
 
 CMD ["python", "app.py"]
