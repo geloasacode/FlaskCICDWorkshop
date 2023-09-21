@@ -4,7 +4,7 @@
 
 This repository contains the configuration files and scripts for implementing Continuous Integration (CI) and Continuous Deployment (CD) for the Python Web Application using GitHub Actions.
 
-## CI/CD Workflows
+## CI/CD Workflows 
 
 ### Python Testing Application Workflow
 
@@ -23,7 +23,7 @@ This workflow is responsible for testing the Python-based Python Web Application
 
 - **File**: [`.github/workflows/docker-ecr-ci.yaml`](.github/workflows/docker-ecr-ci.yaml)
 - **Trigger**: This workflow is triggered in the following scenarios:
-  - When a pull request is created or updated on the `main` branch.
+  - When a push action is created or updated on the `main` branch.
   - After the "Python Testing Application" workflow completes successfully.
   - Manually triggered using the GitHub Actions workflow dispatch.
 
@@ -40,7 +40,7 @@ This workflow automates the containerization and ECR (Amazon Elastic Container R
 
 - **File**: [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml)
 - **Trigger**: This workflow is triggered in the following scenarios:
-  - When a pull request is created or updated on the `main` branch.
+  - When a push action is created or updated on the `main` branch.
   - After the "Build Docker Image and Upload to ECR" workflow completes successfully.
   - Manually triggered using the GitHub Actions workflow dispatch.
 
