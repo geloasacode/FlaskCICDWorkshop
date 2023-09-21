@@ -1,4 +1,4 @@
-![Overview](simple-flask.png)
+![Overview](simple-flask.PNG)
 
 # CI/CD for Python Web Application
 
