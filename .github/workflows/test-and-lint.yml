@@ -2,7 +2,7 @@ name: Python testing application
 # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
