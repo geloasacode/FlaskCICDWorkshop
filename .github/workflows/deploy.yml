@@ -40,11 +40,17 @@ jobs:
         run: |
           terraform fmt
           terraform init -upgrade
-  
+
+      - name: Terraform Delete
+        description: | 
+          Clean up first the tfstate
+        run: |
+          terraform destroy -auto-approve
+
       - name: Terraform Plan
         id: plan
         run: terraform plan -out=tfplan
         continue-on-error: true
-
+          
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
