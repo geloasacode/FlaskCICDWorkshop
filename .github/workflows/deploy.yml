@@ -43,7 +43,7 @@ jobs:
 
       - name: Terraform Delete
         run: |
-          # Clean up first the tfstate
+          # Clean up tfstate
           terraform destroy -auto-approve
 
       - name: Terraform Plan
