@@ -4,9 +4,9 @@ RUN apk update
 
 COPY ./app_folder /home/app-folder
 
-RUN pip install flask
-
 WORKDIR /home/app-folder
+
+RUN pip install flask
 
 EXPOSE 8080
 
