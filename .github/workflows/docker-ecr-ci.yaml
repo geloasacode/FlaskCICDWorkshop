@@ -14,7 +14,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'failure'}}
     steps:
       - name: Print Failure Message
-        run: echo 'The Initial test failed'
+        run: echo 'Building of Image Failed'
 
   on-success:
     runs-on: ubuntu-latest

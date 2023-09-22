@@ -6,7 +6,14 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure'}}
+    steps:
+      - name: Print Failure Message
+        run: echo 'Test failed'
+
+  on-success:
     runs-on: ubuntu-latest
     defaults:
       run:
