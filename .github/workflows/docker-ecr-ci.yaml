@@ -2,7 +2,7 @@ name: Build Docker Image And Upload TO ECR
 
 on:
   # push:
-  #   branches: [ "main" ]
+  #  branches: [ "main" ]
   workflow_run:
     workflows: [ "Python testing application" ]
     types: [completed]
