@@ -1,7 +1,7 @@
 variable "aws-key-pair" {
   description = "key pair to be use"
   type        = string
-  default     = "terraform"
+  default     = "terraform-cicd"
 }
 
 variable "iam_instance_profile" {
