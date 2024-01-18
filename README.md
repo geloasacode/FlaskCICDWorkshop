@@ -1,53 +1,43 @@
+# CI/CD for Python Web Application
 ![Overview](CI-CD.PNG)
 
-# CI/CD for Python Web Application
+This repository contains configuration files and scripts to implement Continuous Integration (CI) and Continuous Deployment (CD) for a Python Web Application using GitHub Actions.
 
-This repository contains the configuration files and scripts for implementing Continuous Integration (CI) and Continuous Deployment (CD) for the Python Web Application using GitHub Actions.
+## CI/CD Workflows
 
-## CI/CD Workflows 
-
-### Python Testing Application Workflow
+### 1. Python Testing Application Workflow
 
 - **File**: [`.github/workflows/test-and-lint.yaml`](.github/workflows/test-and-lint.yaml)
-- **Trigger**: This workflow is triggered whenever a pull request is created or updated on the `main` branch.
+- **Trigger**: Triggered on pull requests to the `main` branch.
 
-#### Workflow Description
+**Workflow Description:**
+This workflow tests the Python Web Application by:
+- Setting up the Python environment.
+- Installing dependencies (Flask, pytest, flake8).
+- Linting the codebase using flake8.
+- Executing unit tests with pytest.
 
-This workflow is responsible for testing the Python-based Python Web Application. It performs the following steps:
-- Sets up the Python environment based on the specified Python versions.
-- Installs project dependencies, including Flask, pytest, and flake8.
-- Lints the codebase using flake8 to check for syntax errors and coding standards.
-- Executes unit tests using pytest.
-
-### Build Docker Image and Upload to ECR Workflow
+### 2. Build Docker Image and Upload to ECR Workflow
 
 - **File**: [`.github/workflows/docker-ecr-ci.yaml`](.github/workflows/docker-ecr-ci.yaml)
-- **Trigger**: This workflow is triggered in the following scenarios:
-  - When a push action is created or updated on the `main` branch.
-  - After the "Python Testing Application" workflow completes successfully.
-  - Manually triggered using the GitHub Actions workflow dispatch.
+- **Trigger**: Triggered on push to the `main` branch, successful completion of "Python Testing Application" workflow, or manual trigger.
 
-#### Workflow Description
-
-This workflow automates the containerization and ECR (Amazon Elastic Container Registry) image management for the Python Web Application. It consists of the following steps:
-- Checks for the result of the "Python Testing Application" workflow. If it fails, it provides a failure message.
+**Workflow Description:**
+Automates containerization and ECR (Amazon Elastic Container Registry) image management for the Python Web Application:
+- Checks the result of the "Python Testing Application" workflow and provides a failure message if it fails.
 - Configures AWS credentials for ECR access.
 - Logs in to Amazon ECR.
 - Deletes existing images from the ECR repository.
 - Builds a Docker image and pushes it to the ECR repository.
 
-### Deploy to EC2 Workflow
+### 3. Deploy to EC2 Workflow
 
 - **File**: [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml)
-- **Trigger**: This workflow is triggered in the following scenarios:
-  - When a push action is created or updated on the `main` branch.
-  - After the "Build Docker Image and Upload to ECR" workflow completes successfully.
-  - Manually triggered using the GitHub Actions workflow dispatch.
+- **Trigger**: Triggered on push to the `main` branch, successful completion of "Build Docker Image and Upload to ECR" workflow, or manual trigger.
 
-#### Workflow Description
-
-This workflow automates the deployment of the Python Web Application to an EC2 instance using Terraform. It includes the following steps:
-- Checks for the result of the "Build Docker Image and Upload to ECR" workflow. If it fails, it provides a failure message.
+**Workflow Description:**
+Automates deployment of the Python Web Application to an EC2 instance using Terraform:
+- Checks the result of the "Build Docker Image and Upload to ECR" workflow and provides a failure message if it fails.
 - Sets up Terraform for infrastructure management.
 - Initializes Terraform and performs a plan to review changes.
 - Applies Terraform changes to deploy the application to EC2.
@@ -56,18 +46,16 @@ This workflow automates the deployment of the Python Web Application to an EC2 i
 
 To use these CI/CD workflows for your Python Web Application, follow these steps:
 
-1. Fork this repository to your own GitHub account.
+1. Fork this repository to your GitHub account.
 
-2. Configure the necessary secrets and environment variables in your repository settings, including AWS credentials for ECR and EC2 deployment.
+2. Configure necessary secrets and environment variables in your repository settings, including AWS credentials for ECR and EC2 deployment.
 
 3. Create and manage pull requests on the `main` branch to trigger the workflows automatically.
 
-4. Monitor the workflow runs and review their logs for any issues.
+4. Monitor workflow runs and review logs for any issues.
 
-For more details on each workflow's functionality and configuration, refer to the respective workflow files.
+For detailed information on each workflow's functionality and configuration, refer to the respective workflow files.
 
-## Notes
+## Note
 
-- This is a simplified example for educational purposes.
-- Ensure proper security group settings to allow traffic on the required ports.
 - Remember to clean up resources when they are no longer needed.
